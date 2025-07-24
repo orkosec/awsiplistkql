@@ -1,2 +1,7 @@
 # awsiplistkql
-Automatically fetches and formats AWS IP ranges into a KQL-compatible array or file for use with externaldata, Azure Sentinel, Log Analytics, or threat detection.
+
+**awsiplistkql** simplifies and flattens AWS's public IP ranges into a JSON format that is compatible with the `externaldata` operator in KQL.
+
+> The native AWS IP ranges JSON (https://ip-ranges.amazonaws.com/ip-ranges.json) contains a nested structure that does **not** work well with `externaldata`.  
+> This tool converts it into a clean, one-line object with just the required IP CIDRs.
+
