@@ -3,7 +3,6 @@ name: Update AWS IP Ranges
 on:
   schedule:
     - cron: '* * * * *'  # Every day at 01:00 UTC
-  workflow_dispatch:
 
 jobs:
   update:
