@@ -10,24 +10,23 @@ def fetch_aws_ip_ranges():
     return response.json()
 
 def extract_ip_prefixes(data):
-    ipv4 = sorted(set(entry["ip_prefix"] for entry in data.get("prefixes", []) if "ip_prefix" in entry))
-    ipv6 = sorted(set(entry["ipv6_prefix"] for entry in data.get("ipv6_prefixes", []) if "ipv6_prefix" in entry))
-    return ipv4, ipv6
+    ipv4 = [entry["ip_prefix"] for entry in data.get("prefixes", []) if "ip_prefix" in entry]
+    ipv6 = [entry["ipv6_prefix"] for entry in data.get("ipv6_prefixes", []) if "ipv6_prefix" in entry]
+    return sorted(set(ipv4 + ipv6))
 
-def save_split_prefixes(ipv4, ipv6, filename):
+def save_json(ip_list, filename):
     output = {
         "cloudName": "AWS",
-        "IPv4_Prefixes": ipv4,
-        "IPv6_Prefixes": ipv6
+        "Prefixes": ip_list
     }
     with open(filename, "w") as f:
-        json.dump(output, f, separators=(",", ":"))
+        json.dump(output, f, separators=(",", ":")) 
 
 def main():
     data = fetch_aws_ip_ranges()
-    ipv4, ipv6 = extract_ip_prefixes(data)
-    save_split_prefixes(ipv4, ipv6, OUTPUT_FILE)
-    print(f"[✓] Saved {len(ipv4)} IPv4 and {len(ipv6)} IPv6 prefixes to {OUTPUT_FILE}")
+    ip_list = extract_ip_prefixes(data)
+    save_json(ip_list, OUTPUT_FILE)
+    print(f"[✓] Saved {len(ip_list)} prefixes to {OUTPUT_FILE}.")
 
 if __name__ == "__main__":
     main()
